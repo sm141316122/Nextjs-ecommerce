@@ -9,7 +9,7 @@ const currency = z
 	);
 
 // Schema for inserting products
-export const inserProductSchema = z.object({
+export const insertProductSchema = z.object({
 	name: z.string().min(3, "Name must be at least 3 characters"),
 	slug: z.string().min(3, "Slug must be at least 3 characters"),
 	category: z.string().min(3, "Category must be at least 3 characters"),
@@ -20,4 +20,9 @@ export const inserProductSchema = z.object({
 	isFeatured: z.boolean(),
 	banner: z.string().nullable(),
 	price: currency,
+});
+
+export const signInFormSchema = z.object({
+	email: z.email("Invalid email address"),
+	password: z.string().min(6, "Password must be at least 6 characters"),
 });
