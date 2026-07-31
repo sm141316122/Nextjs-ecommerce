@@ -9,6 +9,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
+import UserButton from "./user-button";
 
 function Menu() {
 	return (
@@ -18,12 +19,7 @@ function Menu() {
 				<Link href="/cart" className={buttonVariants({ variant: "ghost" })}>
 					<ShoppingCart /> Cart
 				</Link>
-				<Link
-					href="/sign-in"
-					className={buttonVariants({ variant: "default" })}
-				>
-					<UserIcon /> Sign In
-				</Link>
+				<UserButton />
 			</nav>
 			<nav className="md:hidden">
 				<Sheet>

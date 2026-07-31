@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
+import { da } from "zod/v4/locales";
 
 const currency = z
 	.string()
@@ -25,4 +26,37 @@ export const insertProductSchema = z.object({
 export const signInFormSchema = z.object({
 	email: z.email("Invalid email address"),
 	password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export const signUpFormSchema = z
+	.object({
+		name: z.string().min(3, "Name must be at least 3 characters"),
+		email: z.email("Invalid email address"),
+		password: z.string().min(6, "Password must be at least 6 characters"),
+		confirmPassword: z
+			.string()
+			.min(6, "Confirm password must be at least 6 characters"),
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: "Password not match",
+		path: ["confirmPassword"],
+	});
+
+export const cartItemSchema = z.object({
+	productId: z.string().min(1, "Product is required"),
+	name: z.string().min(1, "Name is required"),
+	slug: z.string().min(1, "Slug is required"),
+	qty: z.number().int().nonnegative("Quantity must be a positive number"),
+	image: z.string().min(1, "Image is required"),
+	price: currency,
+});
+
+export const inserCartSchema = z.object({
+	items: z.array(cartItemSchema),
+	itemPrice: currency,
+	totalPrice: currency,
+	shippingPrice: currency,
+	taxtPrice: currency,
+	sessionCartId: z.string().min(1, "Session cart id is required"),
+	userId: z.string().optional().nullable(),
 });
