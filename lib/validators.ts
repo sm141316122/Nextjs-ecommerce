@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { formatNumberWithDecimal } from "./utils";
-import { da } from "zod/v4/locales";
 
 const currency = z
 	.string()
@@ -51,12 +50,12 @@ export const cartItemSchema = z.object({
 	price: currency,
 });
 
-export const inserCartSchema = z.object({
+export const insertCartSchema = z.object({
 	items: z.array(cartItemSchema),
 	itemPrice: currency,
 	totalPrice: currency,
 	shippingPrice: currency,
-	taxtPrice: currency,
+	taxPrice: currency,
 	sessionCartId: z.string().min(1, "Session cart id is required"),
 	userId: z.string().optional().nullable(),
 });
