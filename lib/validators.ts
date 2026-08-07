@@ -59,3 +59,5 @@ export const insertCartSchema = z.object({
 	sessionCartId: z.string().min(1, "Session cart id is required"),
 	userId: z.string().optional().nullable(),
 });
+
+export const shippingAddressSchema = z.object({});
