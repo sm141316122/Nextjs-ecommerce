@@ -10,15 +10,14 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import UserButton from "./user-button";
+import CartButton from "./cart-button";
 
-function Menu() {
+async function Menu() {
 	return (
 		<div className="flex justify-end gap-3">
 			<nav className="hidden md:flex w-full max-w-xs gap-1">
 				<ModeToggle />
-				<Link href="/cart" className={buttonVariants({ variant: "ghost" })}>
-					<ShoppingCart /> Cart
-				</Link>
+				<CartButton />
 				<UserButton />
 			</nav>
 			<nav className="md:hidden">
@@ -34,9 +33,7 @@ function Menu() {
 							<SheetTitle>Menu</SheetTitle>
 						</SheetHeader>
 						<ModeToggle />
-						<Link href="/cart" className={buttonVariants({ variant: "ghost" })}>
-							<ShoppingCart /> Cart
-						</Link>
+						<CartButton />
 						<Link
 							href="/sign-in"
 							className={buttonVariants({ variant: "default" })}

@@ -19,3 +19,11 @@ export const signUpDefaltValues = {
 	password: "",
 	confirmPassword: "",
 };
+
+export const shippingAddressDefaultValues = {
+	fullName: "Ben",
+	streetAddress: "123 Main Street",
+	city: "Anytown",
+	postalCode: "12345",
+	country: "TW",
+};

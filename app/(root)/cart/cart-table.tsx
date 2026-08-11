@@ -18,6 +18,7 @@ import {
 import { Cart } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { round2 } from "@/lib/utils";
 
 export default function CartTable({ cart }: { cart?: Cart }) {
 	const router = useRouter();
@@ -114,7 +115,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
 											</Button>
 										</TableCell>
 										<TableCell className="text-right">
-											$ {Number(item.price) * item.qty}
+											$ {round2(Number(item.price) * item.qty)}
 										</TableCell>
 									</TableRow>
 								))}
@@ -134,7 +135,14 @@ export default function CartTable({ cart }: { cart?: Cart }) {
 							</div>
 							<div className="pb-3 text-xl">
 								Subtotal ({cart.items.reduce((a, c) => a + c.qty, 0)})：
-								<span className="font-bold">$ {cart.itemPrice}</span>
+								<span className="font-bold">
+									${" "}
+									{round2(
+										Number(cart.itemPrice) +
+											Number(cart.shippingPrice) +
+											Number(cart.taxPrice),
+									)}
+								</span>
 							</div>
 							<Button
 								type="button"

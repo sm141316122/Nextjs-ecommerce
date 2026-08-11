@@ -4,6 +4,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./db/prisma";
 import { compareSync } from "bcrypt-ts-edge";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	pages: {
@@ -62,6 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		async jwt({ token, user, trigger, session }: any) {
 			if (user) {
+				token.id = user.id;
 				token.role = user.role;
 
 				if (user.name === "NO_NAME") {
@@ -72,12 +74,55 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 						data: { name: token.name },
 					});
 				}
+
+				if (trigger === "signIn" || "signUp") {
+					const cookieObject = await cookies();
+					const sessionCartId = cookieObject.get("sessionCartId")?.value;
+
+					if (sessionCartId) {
+						const sessionCart = await prisma.cart.findFirst({
+							where: { sessionCartId },
+						});
+
+						if (sessionCart) {
+							await prisma.cart.deleteMany({
+								where: { userId: user.id },
+							});
+
+							await prisma.cart.update({
+								where: { id: sessionCart.id },
+								data: { userId: user.id },
+							});
+						}
+					}
+				}
+			}
+
+			if (session?.user.name && trigger === "update") {
+				token.name = session.user.name;
 			}
 
 			return token;
 		},
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		authorized({ request, auth }: any) {
+			// Array of regex patterns of paths we want to protect
+			const protectPaths = [
+				/\/shipping-address/,
+				/\/payment-method/,
+				/\/place-order/,
+				/\/profile/,
+				/\/user\/(.*)/,
+				/\/order\/(.*)/,
+				/\/admin/,
+			];
+
+			// Get pathname from the regex URL object
+			const { pathname } = request.nextUrl;
+
+			// Check if user is not authenticated an accessing a protected path
+			if (!auth && protectPaths.some((p) => p.test(pathname))) return false;
+
 			// Check for session cart cookie
 			if (!request.cookies.get("sessionCartId")) {
 				// Generate new session cart id cookie
