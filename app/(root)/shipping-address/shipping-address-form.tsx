@@ -27,7 +27,7 @@ export default function ShippingAddressForm({
 }) {
 	const router = useRouter();
 
-	const [isPending, startTransttion] = useTransition();
+	const [isPending, startTransition] = useTransition();
 
 	const form = useForm<z.infer<typeof shippingAddressSchema>>({
 		resolver: zodResolver(shippingAddressSchema),
@@ -37,7 +37,7 @@ export default function ShippingAddressForm({
 	const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = async (
 		values,
 	) => {
-		startTransttion(async () => {
+		startTransition(async () => {
 			const res = await updateUserAddress(values);
 
 			if (!res.success) {

@@ -134,7 +134,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
 								<span>$ {cart.taxPrice}</span>
 							</div>
 							<div className="pb-3 text-xl">
-								Subtotal ({cart.items.reduce((a, c) => a + c.qty, 0)})：
+								Subtotal：
 								<span className="font-bold">
 									${" "}
 									{round2(

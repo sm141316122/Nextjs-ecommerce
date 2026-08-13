@@ -75,7 +75,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					});
 				}
 
-				if (trigger === "signIn" || "signUp") {
+				if (trigger === "signIn" || trigger === "signUp") {
 					const cookieObject = await cookies();
 					const sessionCartId = cookieObject.get("sessionCartId")?.value;
 
