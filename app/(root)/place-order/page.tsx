@@ -123,7 +123,7 @@ export default async function PlaceOrderPage() {
 						<CardContent className=" gap-4 space-y-4">
 							<div className="flex justify-between">
 								<div>Items</div>
-								<div>${cart.itemPrice}</div>
+								<div>${cart.itemsPrice}</div>
 							</div>
 							<div className="flex justify-between">
 								<div>Tax</div>

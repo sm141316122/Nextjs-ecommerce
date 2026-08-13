@@ -1,15 +1,13 @@
 "use server";
 
 import { isRedirectError } from "next/dist/client/components/redirect-error";
-import { formatError } from "../utils";
+import { convertToPlainObject, formatError } from "../utils";
 import { auth } from "@/auth";
 import { getUserById } from "./user.actions";
 import { getMyCart } from "./cart.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
-import { success } from "zod";
-import { redirect } from "next/dist/server/api-utils";
 
 export async function createOrder() {
 	try {
@@ -51,7 +49,7 @@ export async function createOrder() {
 			userId: user.id,
 			shippingAddress: user.address,
 			paymentMethod: user.paymentMethod,
-			itemsPrice: cart.itemPrice,
+			itemsPrice: cart.itemsPrice,
 			shippingPrice: cart.shippingPrice,
 			taxPrice: cart.taxPrice,
 			totalPrice: cart.totalPrice,
@@ -76,7 +74,7 @@ export async function createOrder() {
 				where: { id: cart.id },
 				data: {
 					items: [],
-					itemPrice: 0,
+					itemsPrice: 0,
 					shippingPrice: 0,
 					taxPrice: 0,
 					totalPrice: 0,
@@ -98,4 +96,16 @@ export async function createOrder() {
 
 		return { success: false, message: formatError(error) };
 	}
+}
+
+export async function getOrderById(orderId: string) {
+	const data = await prisma.order.findFirst({
+		where: { id: orderId },
+		include: {
+			orderItems: true,
+			user: { select: { name: true, email: true } },
+		},
+	});
+
+	return convertToPlainObject(data);
 }

@@ -11,15 +11,15 @@ import { Prisma } from "../generated/prisma/client";
 
 // Calculate cart prices
 const calcPrice = (items: CartItem[]) => {
-	const itemPrice = round2(
+	const itemsPrice = round2(
 			items.reduce((acc, item) => acc + Number(item.price) * item.qty, 0),
 		),
-		shippingPrice = round2(itemPrice > 100 ? 0 : 10),
-		taxPrice = round2(0.15 * itemPrice),
-		totalPrice = round2(itemPrice + shippingPrice + taxPrice);
+		shippingPrice = round2(itemsPrice > 100 ? 0 : 10),
+		taxPrice = round2(0.15 * itemsPrice),
+		totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
 	return {
-		itemPrice: itemPrice.toFixed(2),
+		itemsPrice: itemsPrice.toFixed(2),
 		totalPrice: totalPrice.toFixed(2),
 		shippingPrice: shippingPrice.toFixed(2),
 		taxPrice: taxPrice.toFixed(2),
@@ -126,7 +126,7 @@ export async function getMyCart() {
 	return convertToPlainObject({
 		...cart,
 		items: cart.items as CartItem[],
-		itemPrice: cart.itemPrice.toString(),
+		itemsPrice: cart.itemsPrice.toString(),
 		totalPrice: cart.totalPrice.toString(),
 		shippingPrice: cart.shippingPrice.toString(),
 		taxPrice: cart.taxPrice.toString(),

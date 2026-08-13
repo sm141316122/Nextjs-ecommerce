@@ -138,7 +138,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
 								<span className="font-bold">
 									${" "}
 									{round2(
-										Number(cart.itemPrice) +
+										Number(cart.itemsPrice) +
 											Number(cart.shippingPrice) +
 											Number(cart.taxPrice),
 									)}
