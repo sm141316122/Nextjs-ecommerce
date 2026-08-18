@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 			EncryptType: String(params.EncryptType),
 			CheckMacValue: checkMacValue,
 		};
-		console.log(orderId);
+
 		await prisma.order.update({
 			where: { id: orderId },
 			data: { merchantTradeNo },

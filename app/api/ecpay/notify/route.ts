@@ -42,9 +42,22 @@ export async function POST(request: Request) {
 		if (ecpayResponse.RtnCode !== "1")
 			return new NextResponse("1|OK", { status: 200 });
 
-		await prisma.order.update({
-			where: { id: order.id },
-			data: { isPaid: true, paidAt: new Date() },
+		await prisma.$transaction(async (tx) => {
+			const currentOrder = await tx.order.findFirst({
+				where: { id: order.id },
+			});
+
+			if (!currentOrder) throw new Error("Order not found in transaction");
+
+			if (currentOrder.isPaid) return;
+
+			await tx.order.update({
+				where: { id: currentOrder.id },
+				data: {
+					isPaid: true,
+					paidAt: new Date(),
+				},
+			});
 		});
 
 		return new NextResponse("1|OK", { status: 200 });
