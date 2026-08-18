@@ -8,8 +8,6 @@ import { getMyCart } from "./cart.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
-import { exportTraceState } from "next/dist/trace";
-import { success } from "zod";
 
 export async function createOrder() {
 	try {

@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 			ReturnURL: `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/api/ecpay/notify`,
 			ChoosePayment: "ALL",
 			EncryptType: 1,
-			OrderResultURL: `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/order/${order!.id}`,
+			OrderResultURL: `${process.env.NEXT_PUBLIC_APP_SERVER_URL}/payment-success?orderId=${order!.id}`,
 		};
 
 		const checkMacValue = generateCheckMacValue(params);

@@ -18,7 +18,6 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { round } from "@/lib/utils";
-import { createOrder } from "@/lib/actions/order.actions";
 import PlaceOrderForm from "./place-order-form";
 
 export const metadata: Metadata = {
