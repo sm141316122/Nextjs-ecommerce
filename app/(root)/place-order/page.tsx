@@ -17,7 +17,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { round2 } from "@/lib/utils";
+import { round } from "@/lib/utils";
 import { createOrder } from "@/lib/actions/order.actions";
 import PlaceOrderForm from "./place-order-form";
 
@@ -107,7 +107,7 @@ export default async function PlaceOrderPage() {
 											</TableCell>
 											<TableCell className="text-right">
 												<span className="px-2">
-													{round2(Number(item.price) * item.qty)}
+													{round(Number(item.price) * item.qty)}
 												</span>
 											</TableCell>
 										</TableRow>

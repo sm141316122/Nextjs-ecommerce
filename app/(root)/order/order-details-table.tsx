@@ -12,8 +12,9 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { formatDateTime, formatId, round2 } from "@/lib/utils";
+import { formatDateTime, formatId, round } from "@/lib/utils";
 import { Order } from "@/types";
+import OrderPayButton from "./[id]/order-pay-button";
 
 export default function OrderDetailsTable({ order }: { order: Order }) {
 	const {
@@ -101,7 +102,7 @@ export default function OrderDetailsTable({ order }: { order: Order }) {
 											</TableCell>
 											<TableCell className="text-right">
 												<span className="px-2">
-													{round2(Number(item.price) * item.qty)}
+													{round(Number(item.price) * item.qty)}
 												</span>
 											</TableCell>
 										</TableRow>
@@ -131,6 +132,7 @@ export default function OrderDetailsTable({ order }: { order: Order }) {
 								<div>Total</div>
 								<div>${totalPrice}</div>
 							</div>
+							{!order.isPaid && <OrderPayButton orderId={order.id} />}
 						</CardContent>
 					</Card>
 				</div>

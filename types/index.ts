@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
 	cartItemSchema,
+	ecpayNotificationSchema,
 	insertCartSchema,
 	insertOrderSchema,
 	insertProductSchema,
@@ -30,3 +31,5 @@ export type Order = z.infer<typeof insertOrderSchema> & {
 	orderItems: OrderItem[];
 	user: { name: string; email: string };
 };
+
+export type EcpayNotification = z.infer<typeof ecpayNotificationSchema>;

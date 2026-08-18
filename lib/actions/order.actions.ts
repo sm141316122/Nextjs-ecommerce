@@ -8,6 +8,8 @@ import { getMyCart } from "./cart.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
+import { exportTraceState } from "next/dist/trace";
+import { success } from "zod";
 
 export async function createOrder() {
 	try {
@@ -58,13 +60,22 @@ export async function createOrder() {
 		// Create a transaction to create order and order items in database
 		const insertOrderId = await prisma.$transaction(async (tx) => {
 			// Create order
-			const insertOrder = await tx.order.create({ data: order });
+			const insertOrder = await tx.order.create({
+				data: {
+					...order,
+					itemsPrice: Number(order.itemsPrice),
+					shippingPrice: Number(order.shippingPrice),
+					taxPrice: Number(order.taxPrice),
+					totalPrice: Number(order.totalPrice),
+				},
+			});
 			// Create order items from tje cart items
 			for (const item of cart.items as CartItem[]) {
 				await tx.orderItem.create({
 					data: {
 						...item,
 						orderId: insertOrder.id,
+						price: Number(item.price),
 					},
 				});
 			}

@@ -1,13 +1,5 @@
 import { z } from "zod";
-import { formatNumberWithDecimal } from "./utils";
 import { PAYMENT_METHODS } from "./constants";
-
-const currency = z
-	.string()
-	.refine(
-		(value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
-		"Price must have exactly two decimal places",
-	);
 
 // Schema for inserting products
 export const insertProductSchema = z.object({
@@ -20,7 +12,7 @@ export const insertProductSchema = z.object({
 	images: z.array(z.string()).min(1, "product must have at least one image"),
 	isFeatured: z.boolean(),
 	banner: z.string().nullable(),
-	price: currency,
+	price: z.string(),
 });
 
 export const signInFormSchema = z.object({
@@ -48,15 +40,15 @@ export const cartItemSchema = z.object({
 	slug: z.string().min(1, "Slug is required"),
 	qty: z.number().int().nonnegative("Quantity must be a positive number"),
 	image: z.string().min(1, "Image is required"),
-	price: currency,
+	price: z.string(),
 });
 
 export const insertCartSchema = z.object({
 	items: z.array(cartItemSchema),
-	itemsPrice: currency,
-	totalPrice: currency,
-	shippingPrice: currency,
-	taxPrice: currency,
+	itemsPrice: z.string(),
+	totalPrice: z.string(),
+	shippingPrice: z.string(),
+	taxPrice: z.string(),
 	sessionCartId: z.string().min(1, "Session cart id is required"),
 	userId: z.string().optional().nullable(),
 });
@@ -85,18 +77,34 @@ export const orderItemSchema = z.object({
 	slug: z.string(),
 	name: z.string(),
 	image: z.string(),
-	price: currency,
+	price: z.string(),
 	qty: z.number(),
 });
 
 export const insertOrderSchema = z.object({
 	userId: z.string().min(1, "User is required"),
-	itemsPrice: currency,
-	shippingPrice: currency,
-	taxPrice: currency,
-	totalPrice: currency,
+	itemsPrice: z.string(),
+	shippingPrice: z.string(),
+	taxPrice: z.string(),
+	totalPrice: z.string(),
 	paymentMethod: z.string().refine((data) => PAYMENT_METHODS.includes(data), {
 		message: "Invalid payment method",
 	}),
 	shippingAddress: shippingAddressSchema,
+});
+
+export const ecpayPaymentSchema = z.object({
+	orderId: z.string().min(1, "Oder id is required"),
+});
+
+export const ecpayNotificationSchema = z.object({
+	MerchantID: z.string(),
+	MerchantTradeNo: z.string(),
+	RtnCode: z.string(),
+	RtnMsg: z.string(),
+	TradeAmt: z.string(),
+	PaymentDate: z.string(),
+	PaymentType: z.string(),
+	CheckMacValue: z.string(),
+	SimulatePaid: z.string(),
 });
