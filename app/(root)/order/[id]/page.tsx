@@ -19,6 +19,10 @@ export default async function OrderDetailsPage(props: {
 
 	const session = await auth();
 
+	console.log("========== ORDER PAGE ==========");
+	console.log("session:", session);
+	console.log("=================================");
+
 	if (orderData.id !== session?.user?.id && session?.user?.role !== "admin") {
 		return redirect("/unauthorized");
 	}

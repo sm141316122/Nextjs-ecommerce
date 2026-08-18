@@ -15,6 +15,10 @@ import { signOutUser } from "@/lib/actions/user.actions";
 export default async function UserButton() {
 	const session = await auth();
 
+	console.log("========== USER BUTTON ==========");
+	console.log("session:", session);
+	console.log("=================================");
+
 	if (!session) {
 		return (
 			<Link href="/sign-in" className={buttonVariants({ variant: "default" })}>
