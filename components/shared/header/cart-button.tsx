@@ -7,9 +7,6 @@ export default async function CartButton() {
 	const cart = await getMyCart();
 	const totalQty = cart?.items.reduce((a, c) => a + c.qty, 0);
 
-	if (totalQty) {
-	}
-
 	return (
 		<Link
 			href="/cart"
