@@ -12,6 +12,7 @@ function NotFoundPage() {
 				width={48}
 				height={48}
 				alt={`${APP_NAME} logo`}
+				loading="eager"
 				priority
 			/>
 			<div className="p-6 rounded-lg shadow-md text-center">

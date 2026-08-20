@@ -15,6 +15,7 @@ function Header() {
 							height={48}
 							width={48}
 							priority={true}
+							loading="eager"
 						/>
 						<span className="hidden lg:block font-bold text-2xl ml-3">
 							{APP_NAME}

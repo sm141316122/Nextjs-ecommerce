@@ -12,8 +12,8 @@ import { hashSync } from "bcrypt-ts-edge";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { formatError } from "../utils";
 import { ShippingAddress } from "@/types";
-import z, { success } from "zod";
 import { getMyCart } from "./cart.actions";
+import z from "zod";
 
 //  Sign in with credentials
 export async function signInWithCredentials(
@@ -154,6 +154,27 @@ export async function updateUserPaymentMethod(
 		});
 
 		return { success: true, message: "Payment method update successfully" };
+	} catch (error) {
+		return { success: false, message: formatError(error) };
+	}
+}
+
+export async function updateProfile(user: { name: string; email: string }) {
+	try {
+		const session = await auth();
+		if (!session) throw new Error("User not authorized");
+
+		const currentUser = await prisma.user.findFirst({
+			where: { id: session?.user?.id },
+		});
+		if (!currentUser) throw new Error("User not found");
+
+		await prisma.user.update({
+			where: { id: currentUser.id },
+			data: { name: user.name },
+		});
+
+		return { success: true, message: "User update successfully" };
 	} catch (error) {
 		return { success: false, message: formatError(error) };
 	}

@@ -18,6 +18,8 @@ export default function UserLayout({
 								width={48}
 								height={48}
 								alt={APP_NAME}
+								priority
+								loading="eager"
 							/>
 						</Link>
 						<MainNav className="mx-6" />

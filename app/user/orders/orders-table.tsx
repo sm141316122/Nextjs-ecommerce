@@ -12,7 +12,10 @@ import { formatDateTime, formatId } from "@/lib/utils";
 import Pagination from "@/components/shared/pagination";
 
 export default async function OrdersTable({ page }: { page: string }) {
-	const { orders, totalPage } = await getMyOrders({ page: Number(page) || 1 });
+	const { orders, totalPage } = await getMyOrders({
+		page: Number(page) || 1,
+		limit: 5,
+	});
 
 	return (
 		<>

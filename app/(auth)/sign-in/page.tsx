@@ -41,6 +41,7 @@ export default async function SingInPage({
 							height={100}
 							alt={`${APP_NAME} logo`}
 							priority
+							loading="eager"
 						/>
 					</Link>
 					<CardTitle className="text-center">Sign In</CardTitle>

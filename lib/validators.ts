@@ -108,3 +108,8 @@ export const ecpayNotificationSchema = z.object({
 	CheckMacValue: z.string(),
 	SimulatePaid: z.string(),
 });
+
+export const updataProfileSchema = z.object({
+	name: z.string().min(3, "Name must be as least 3 characters"),
+	email: z.string().min(3, "Email must be as least 3 characters"),
+});
