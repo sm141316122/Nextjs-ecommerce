@@ -150,3 +150,36 @@ export async function getMyOrders({
 
 	return { orders, totalPage: Math.ceil(dataCount / limit) };
 }
+
+export async function getOrderSummary() {
+	const ordersCount = await prisma.order.count();
+	const productsCount = await prisma.product.count();
+	const usersCount = await prisma.user.count();
+
+	const totalSales = await prisma.order.aggregate({
+		_sum: { totalPrice: true },
+	});
+
+	const salesDataRaw = await prisma.$queryRaw<
+		Array<{ month: string; totalSales: bigint }>
+	>`SELECT to_char("createdAt", 'MM/YY') as "month", sum("totalPrice") as "totalSales" FROM "Order" GROUP BY to_char("createdAt", 'MM/YY')`;
+
+	const salesData = salesDataRaw.map((entry) => ({
+		month: entry.month,
+		totalSales: Number(entry.totalSales),
+	}));
+
+	const latestSales = await prisma.order.findMany({
+		orderBy: { createdAt: "desc" },
+		include: { user: { select: { name: true } } },
+	});
+
+	return {
+		ordersCount,
+		productsCount,
+		usersCount,
+		totalSales,
+		salesData,
+		latestSales,
+	};
+}
