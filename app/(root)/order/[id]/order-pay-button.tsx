@@ -32,6 +32,7 @@ export default function OrderPayButton({ orderId }: { orderId: string }) {
 				throw new Error(data.message || "Failed to create payment");
 			setPaymentData(data);
 		} catch (error) {
+			console.log(error);
 			setIsPending(false);
 		}
 	};
