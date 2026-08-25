@@ -26,7 +26,7 @@ function ProductItem({ product }: { product: Product }) {
 			<CardHeader className="items-center">
 				<CardTitle className="text-xs">{product.brand}</CardTitle>
 				<CardAction>
-					<Badge variant="secondary">Featured</Badge>
+					{product.isFeatured && <Badge variant="secondary">Featured</Badge>}
 				</CardAction>
 			</CardHeader>
 			<CardContent>

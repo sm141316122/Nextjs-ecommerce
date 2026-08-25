@@ -19,7 +19,7 @@ export default async function OrderDetailsPage(props: {
 	if (!orderData) notFound();
 
 	const session = await auth();
-	if (session) throw new Error("User not authorized");
+	if (!session) throw new Error("User not authorized");
 
 	await requireOwnerOrAdmin(orderData.userId);
 
