@@ -10,7 +10,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 import { getAllOrders } from "@/lib/actions/order.actions";
-import { requiredAdmin } from "@/lib/auth-guard";
+import { requireAdmin } from "@/lib/auth-guard";
 import { formatDateTime, formatId } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import OrderDeleteDialog from "./order-delete-dialog";
@@ -24,7 +24,7 @@ export default async function AdminOrdersPage({
 }: {
 	searchParams: Promise<{ page: string }>;
 }) {
-	await requiredAdmin();
+	await requireAdmin();
 
 	const { page } = await searchParams;
 

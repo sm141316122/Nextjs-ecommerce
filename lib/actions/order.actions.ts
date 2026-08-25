@@ -10,7 +10,6 @@ import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
-import { tr } from "zod/v4/locales";
 
 export async function createOrder() {
 	try {

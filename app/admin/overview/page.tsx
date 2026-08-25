@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/utils";
 import Charts from "./charts";
-import { requiredAdmin } from "@/lib/auth-guard";
+import { requireAdmin } from "@/lib/auth-guard";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard",
 };
 
 export default async function AdminOverviewPage() {
-	await requiredAdmin();
+	await requireAdmin();
 
 	const session = await auth();
 	if (!session) throw new Error("User not authorized");

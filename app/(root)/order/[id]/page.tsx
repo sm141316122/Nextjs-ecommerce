@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import OrderDetailsTable from "./order-details-table";
 import { ShippingAddress } from "@/types";
-import { requiredAdmin } from "@/lib/auth-guard";
+import { requireOwnerOrAdmin } from "@/lib/auth-guard";
 
 export const metadata: Metadata = {
 	title: "Order Details",
@@ -21,7 +21,7 @@ export default async function OrderDetailsPage(props: {
 	const session = await auth();
 	if (session) throw new Error("User not authorized");
 
-	await requiredAdmin(orderData.userId);
+	await requireOwnerOrAdmin(orderData.userId);
 
 	return (
 		<OrderDetailsTable
