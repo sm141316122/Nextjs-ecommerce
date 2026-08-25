@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { BadgeDollarSign, Barcode, CreditCard, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,16 +13,17 @@ import {
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/utils";
 import Charts from "./charts";
+import { requiredAdmin } from "@/lib/auth-guard";
 
 export const metadata: Metadata = {
 	title: "Admin Dashboard",
 };
 
 export default async function AdminOverviewPage() {
+	await requiredAdmin();
+
 	const session = await auth();
 	if (!session) throw new Error("User not authorized");
-
-	if (session.user.role !== "admin") redirect("/unauthorized");
 
 	const summary = await getOrderSummary();
 
@@ -38,7 +38,7 @@ export default async function AdminOverviewPage() {
 					</CardHeader>
 					<CardContent>
 						<div className="text-2xl font-bold">
-							$ {summary.totalSales._sum.totalPrice!.toString()}
+							$ {summary.totalSales._sum.totalPrice?.toString() || 0}
 						</div>
 					</CardContent>
 				</Card>

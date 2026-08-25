@@ -1,9 +1,10 @@
 import { auth } from "@/auth";
 import { getOrderById } from "@/lib/actions/order.actions";
 import { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
-import OrderDetailsTable from "../order-details-table";
+import { notFound } from "next/navigation";
+import OrderDetailsTable from "./order-details-table";
 import { ShippingAddress } from "@/types";
+import { requiredAdmin } from "@/lib/auth-guard";
 
 export const metadata: Metadata = {
 	title: "Order Details",
@@ -19,12 +20,7 @@ export default async function OrderDetailsPage(props: {
 
 	const session = await auth();
 
-	if (
-		orderData.userId !== session?.user?.id &&
-		session?.user?.role !== "admin"
-	) {
-		return redirect("/unauthorized");
-	}
+	await requiredAdmin(orderData.id !== session?.user?.id);
 
 	return (
 		<OrderDetailsTable

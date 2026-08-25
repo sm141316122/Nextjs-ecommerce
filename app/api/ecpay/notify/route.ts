@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server";
 import { prisma } from "@/db/prisma";
+import { updateOrderToPaid } from "@/lib/actions/order.actions";
 import { generateCheckMacValue } from "@/lib/ecpay";
 import { ecpayNotificationSchema } from "@/lib/validators";
-import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
 	try {
@@ -42,26 +43,11 @@ export async function POST(request: Request) {
 		if (ecpayResponse.RtnCode !== "1")
 			return new NextResponse("1|OK", { status: 200 });
 
-		await prisma.$transaction(async (tx) => {
-			const currentOrder = await tx.order.findFirst({
-				where: { id: order.id },
-			});
-
-			if (!currentOrder) throw new Error("Order not found in transaction");
-
-			if (currentOrder.isPaid) return;
-
-			await tx.order.update({
-				where: { id: currentOrder.id },
-				data: {
-					isPaid: true,
-					paidAt: new Date(),
-				},
-			});
-		});
+		await updateOrderToPaid(order.id);
 
 		return new NextResponse("1|OK", { status: 200 });
 	} catch (error) {
+		console.log(error);
 		return new NextResponse("0|FAIL", { status: 500 });
 	}
 }

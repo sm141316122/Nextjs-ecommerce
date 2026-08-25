@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export default function Pagination({
@@ -11,9 +11,11 @@ export default function Pagination({
 	totalPage: number;
 }) {
 	const router = useRouter();
+	const pathname = usePathname();
+	console.log(pathname);
 
 	const handleClick = (clickPage: number) => {
-		router.push(`/user/orders?page=${clickPage}`);
+		router.push(`${pathname}?page=${clickPage}`);
 	};
 
 	return (

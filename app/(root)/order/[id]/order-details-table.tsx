@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { formatDateTime, formatId, round } from "@/lib/utils";
 import { Order } from "@/types";
-import OrderPayButton from "./[id]/order-pay-button";
+import OrderPayButton from "./order-pay-button";
 
 export default function OrderDetailsTable({ order }: { order: Order }) {
 	const {
