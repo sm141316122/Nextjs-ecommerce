@@ -30,8 +30,23 @@ export const shippingAddressDefaultValues = {
 
 export const PAYMENT_METHODS = process.env.PAYMENT_METHODS
 	? process.env.PAYMENT_METHODS.split(", ")
-	: ["ECPay", "PayPal", "Stripe"];
+	: ["ECPay", "Stripe", "CashOnDelivery"];
 export const DEFAULT_PAYMENT_METHOD =
 	process.env.DEFAULT_PAYMENT_METHOD || "ECPay";
 
 export const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 5;
+
+export const productDefaultValues = {
+	name: "",
+	slug: "",
+	category: "",
+	images: [] as string[],
+	brand: "",
+	description: "",
+	price: "0",
+	stock: 0,
+	rating: "0",
+	numReviews: 0,
+	isFeatured: false,
+	banner: null as string | null,
+};

@@ -13,7 +13,7 @@ import { Product } from "@/types";
 
 function ProductItem({ product }: { product: Product }) {
 	return (
-		<Card className="w-full max-x-sm">
+		<Card className="w-full max-w-sm pt-0">
 			<Link href={`/product/${product.slug}`}>
 				<Image
 					src={product.images[0]}
@@ -21,6 +21,7 @@ function ProductItem({ product }: { product: Product }) {
 					height={300}
 					alt={product.name}
 					priority
+					className="object-cover w-full h-64"
 				/>
 			</Link>
 			<CardHeader className="items-center">

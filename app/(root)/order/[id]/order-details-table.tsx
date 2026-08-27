@@ -15,8 +15,16 @@ import {
 import { formatDateTime, formatId, round } from "@/lib/utils";
 import { Order } from "@/types";
 import OrderPayButton from "./order-pay-button";
+import MarkAsPaidButton from "./MarkAsPaidButton";
+import MarkAsDeliveredButton from "./MarkAsDeliveredButton";
 
-export default function OrderDetailsTable({ order }: { order: Order }) {
+export default function OrderDetailsTable({
+	order,
+	isAdmin,
+}: {
+	order: Order;
+	isAdmin: boolean;
+}) {
 	const {
 		id,
 		shippingAddress,
@@ -132,7 +140,15 @@ export default function OrderDetailsTable({ order }: { order: Order }) {
 								<div>Total</div>
 								<div>${totalPrice}</div>
 							</div>
-							{!order.isPaid && <OrderPayButton orderId={order.id} />}
+							{!isPaid && paymentMethod !== "CashOnDelivery" && (
+								<OrderPayButton orderId={id} />
+							)}
+							{isAdmin && !isPaid && paymentMethod === "CashOnDelivery" && (
+								<MarkAsPaidButton orderId={id} />
+							)}
+							{isPaid && !isDelivered && paymentMethod === "CashOnDelivery" && (
+								<MarkAsDeliveredButton orderId={id} />
+							)}
 						</CardContent>
 					</Card>
 				</div>

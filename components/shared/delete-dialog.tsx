@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -15,29 +15,56 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { deleteOrder } from "@/lib/actions/order.actions";
+import { deleteProduct } from "@/lib/actions/product.actions";
 
-export default function OrderDeleteDialog({ id }: { id: string }) {
-	const [isPending, startTransaction] = useTransition();
+export default function DeleteDialog({
+	id,
+	deleteType,
+}: {
+	id: string;
+	deleteType: string;
+}) {
+	const [isPending, startTranition] = useTransition();
 	const [open, setOpen] = useState(false);
 
-	const handleClick = async (id: string) => {
-		startTransaction(async () => {
-			const res = await deleteOrder(id);
+	const handleClick = (id: string) => {
+		if (deleteType === "order") {
+			startTranition(async () => {
+				const res = await deleteOrder(id);
 
+				setOpen(false);
+
+				toast.add({
+					type: res.success ? "success" : "error",
+					description: res.message,
+				});
+			});
+		} else if (deleteType === "product") {
+			startTranition(async () => {
+				const res = await deleteProduct(id);
+
+				setOpen(false);
+
+				toast.add({
+					type: res.success ? "success" : "error",
+					description: res.message,
+				});
+			});
+		} else {
 			setOpen(false);
 
 			toast.add({
-				type: res.success ? "success" : "error",
-				description: res.message,
+				type: "error",
+				description: "Invalid Delete Type",
 			});
-		});
+		}
 	};
 
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger
 				render={
-					<Button variant="default" className="cursor-pointer">
+					<Button variant="destructive" className="cursor-pointer">
 						Delete
 					</Button>
 				}

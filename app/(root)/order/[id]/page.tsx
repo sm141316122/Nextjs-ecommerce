@@ -29,6 +29,7 @@ export default async function OrderDetailsPage(props: {
 				...orderData,
 				shippingAddress: orderData.shippingAddress as ShippingAddress,
 			}}
+			isAdmin={session.user?.role === "admin"}
 		/>
 	);
 }

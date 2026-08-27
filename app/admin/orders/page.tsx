@@ -13,7 +13,7 @@ import { getAllOrders } from "@/lib/actions/order.actions";
 import { requireAdmin } from "@/lib/auth-guard";
 import { formatDateTime, formatId } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import OrderDeleteDialog from "./order-delete-dialog";
+import DeleteDialog from "../../../components/shared/delete-dialog";
 
 export const metadata: Metadata = {
 	title: "Admin Orders",
@@ -66,7 +66,7 @@ export default async function AdminOrdersPage({
 								<Button variant="outline">
 									<Link href={`/order/${order.id}`}>Details</Link>
 								</Button>
-								<OrderDeleteDialog id={order.id} />
+								<DeleteDialog id={order.id} deleteType="order" />
 							</TableCell>
 						</TableRow>
 					))}

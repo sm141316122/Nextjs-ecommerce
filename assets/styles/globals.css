@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "uploadthing/tw/v4";
+@source "../../node_modules/@uploadthing/react/dist"; /** <-- depends on your project structure */
 
 @custom-variant dark (&:is(.dark *));
 
@@ -130,11 +132,11 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-  * {
-    @apply border-border outline-ring/50;
+	* {
+		@apply border-border outline-ring/50;
 	}
-  html {
-    @apply font-sans;
+	html {
+		@apply font-sans;
 	}
 }
 

@@ -12,7 +12,6 @@ export default function Pagination({
 }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	console.log(pathname);
 
 	const handleClick = (clickPage: number) => {
 		router.push(`${pathname}?page=${clickPage}`);
