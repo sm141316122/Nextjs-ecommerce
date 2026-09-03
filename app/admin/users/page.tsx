@@ -9,17 +9,18 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import { getAllProducts } from "@/lib/actions/product.actions";
 import { requireAdmin } from "@/lib/auth-guard";
 import { formatId } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import DeleteDialog from "../../../components/shared/delete-dialog";
+import { getAllUsers } from "@/lib/actions/user.actions";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata: Metadata = {
-	title: "Admin Products",
+	title: "Admin Users",
 };
 
-export default async function AdminProductsPage({
+export default async function AdminUsersPage({
 	searchParams,
 }: {
 	searchParams: Promise<{ page: string; query: string; category: string }>;
@@ -32,21 +33,20 @@ export default async function AdminProductsPage({
 	const searchText = params.query || "";
 	const category = params.category || "";
 
-	const { allProducts, totalPage } = await getAllProducts({
+	const { allUsers, totalPage } = await getAllUsers({
 		page,
 		query: searchText,
-		category,
 	});
 
 	return (
 		<div className="space-y-4">
 			<div className="flex justify-between items-center w-full">
 				<div className="flex items-center gap-3">
-					<h1 className="h2-bold">Products</h1>
+					<h1 className="h2-bold">Users</h1>
 					{searchText && (
 						<div>
 							Filter By <i>&quot;{searchText}&quot;</i>
-							<Link href="/admin/products">
+							<Link href="/admin/users">
 								<Button variant="outline" size="sm" className="ml-4">
 									Remove Filter
 								</Button>
@@ -54,36 +54,35 @@ export default async function AdminProductsPage({
 						</div>
 					)}
 				</div>
-				<Button>
-					<Link href="/admin/products/create">Create Product</Link>
-				</Button>
 			</div>
 			<Table>
 				<TableHeader>
 					<TableRow>
 						<TableHead>ID</TableHead>
 						<TableHead>NAME</TableHead>
-						<TableHead className="text-right">PRICE</TableHead>
-						<TableHead>CATEGORY</TableHead>
-						<TableHead>STOCK</TableHead>
-						<TableHead>RATING</TableHead>
+						<TableHead>EMAIL</TableHead>
+						<TableHead>ROLE</TableHead>
 						<TableHead className="w-[100px]">ACTIONS</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{allProducts.map((product) => (
-						<TableRow key={product.id}>
-							<TableCell>{formatId(product.id)}</TableCell>
-							<TableCell>{product.name}</TableCell>
-							<TableCell className="text-right">${product.price}</TableCell>
-							<TableCell>{product.category}</TableCell>
-							<TableCell>{product.stock}</TableCell>
-							<TableCell>{product.rating}</TableCell>
+					{allUsers.map((user) => (
+						<TableRow key={user.id}>
+							<TableCell>{formatId(user.id)}</TableCell>
+							<TableCell>{user.name}</TableCell>
+							<TableCell>{user.email}</TableCell>
+							<TableCell>
+								{user.role === "admin" ? (
+									<Badge>Admin</Badge>
+								) : (
+									<Badge variant="secondary">User</Badge>
+								)}
+							</TableCell>
 							<TableCell className="flex gap-2">
 								<Button variant="outline">
-									<Link href={`/admin/products/${product.id}`}>Edit</Link>
+									<Link href={`/admin/users/${user.id}`}>Edit</Link>
 								</Button>
-								<DeleteDialog id={product.id} deleteType="product" />
+								<DeleteDialog id={user.id} deleteType="user" />
 							</TableCell>
 						</TableRow>
 					))}

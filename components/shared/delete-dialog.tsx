@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { deleteOrder } from "@/lib/actions/order.actions";
 import { deleteProduct } from "@/lib/actions/product.actions";
+import { deleterUser } from "@/lib/actions/user.actions";
 
 export default function DeleteDialog({
 	id,
@@ -42,6 +43,17 @@ export default function DeleteDialog({
 		} else if (deleteType === "product") {
 			startTranition(async () => {
 				const res = await deleteProduct(id);
+
+				setOpen(false);
+
+				toast.add({
+					type: res.success ? "success" : "error",
+					description: res.message,
+				});
+			});
+		} else if (deleteType === "user") {
+			startTranition(async () => {
+				const res = await deleterUser(id);
 
 				setOpen(false);
 

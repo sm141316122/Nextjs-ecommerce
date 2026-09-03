@@ -6,6 +6,7 @@ import { prisma } from "@/db/prisma";
 import { revalidatePath } from "next/cache";
 import { insertProductSchema, updateProductSchema } from "../validators";
 import z from "zod";
+import { Prisma } from "../generated/prisma/client";
 
 export async function getLatestProducts() {
 	const data = await prisma.product.findMany({
@@ -33,14 +34,76 @@ export async function getProductById(id: string) {
 export async function getAllProducts({
 	limit = PAGE_SIZE,
 	page,
+	query,
+	category,
+	price,
+	rating,
+	sort,
 }: {
 	limit?: number;
 	page: number;
 	query: string;
 	category?: string;
+	price?: string;
+	rating?: string;
+	sort?: string;
 }) {
+	const queryFilter: Prisma.ProductWhereInput =
+		query && query !== "all"
+			? {
+					name: {
+						contains: query,
+						mode: "insensitive",
+					} as Prisma.StringFilter,
+				}
+			: {};
+
+	const categoryFilter: Prisma.ProductWhereInput =
+		category && category !== "all"
+			? {
+					category,
+				}
+			: {};
+
+	const priceFilter: Prisma.ProductWhereInput =
+		price && price !== "all"
+			? {
+					price: {
+						gte: Number(price.split("-")[0]),
+						lte: Number(price.split("-")[1]),
+					},
+				}
+			: {};
+
+	const ratingFilter: Prisma.ProductWhereInput =
+		rating && rating !== "all"
+			? {
+					rating: {
+						gte: Number(rating),
+					},
+				}
+			: {};
+	let sortOrder: { [key: string]: string };
+	if (sort === "newest" || sort === "") {
+		sortOrder = { createdAt: "desc" };
+	} else if (sort === "lowest") {
+		sortOrder = { price: "asc" };
+	} else if (sort === "highest") {
+		sortOrder = { price: "desc" };
+	} else if (sort === "rating") {
+		sortOrder = { rating: "desc" };
+	} else {
+		sortOrder = { createdAt: "desc" };
+	}
+
 	const allProducts = await prisma.product.findMany({
-		orderBy: { createdAt: "desc" },
+		where: {
+			...queryFilter,
+			...categoryFilter,
+			...priceFilter,
+			...ratingFilter,
+		},
+		orderBy: sortOrder,
 		take: limit,
 		skip: (page - 1) * limit,
 	});
@@ -116,4 +179,23 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
 	} catch (error) {
 		return { success: false, message: formatError(error) };
 	}
+}
+
+export async function getAllProductCategory() {
+	const data = await prisma.product.groupBy({
+		by: ["category"],
+		_count: true,
+	});
+
+	return data;
+}
+
+export async function getFeaturedProducts() {
+	const data = await prisma.product.findMany({
+		where: { isFeatured: true },
+		orderBy: { createdAt: "desc" },
+		take: 4,
+	});
+
+	return convertToPlainObject(data);
 }

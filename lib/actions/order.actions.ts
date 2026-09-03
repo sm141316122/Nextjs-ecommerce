@@ -10,6 +10,8 @@ import { prisma } from "@/db/prisma";
 import { CartItem } from "@/types";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
+import { includes } from "zod";
+import { Prisma } from "../generated/prisma/client";
 
 export async function createOrder() {
 	try {
@@ -215,11 +217,28 @@ export async function getOrderSummary() {
 export async function getAllOrders({
 	limit = PAGE_SIZE,
 	page,
+	query,
 }: {
 	limit?: number;
 	page: number;
+	query: string;
 }) {
+	const queryFilter: Prisma.OrderWhereInput =
+		query && query !== "all"
+			? {
+					user: {
+						name: {
+							contains: query,
+							mode: "insensitive",
+						} as Prisma.StringFilter,
+					},
+				}
+			: {};
+
 	const allOrders = await prisma.order.findMany({
+		where: {
+			...queryFilter,
+		},
 		orderBy: { createdAt: "desc" },
 		take: limit,
 		skip: (page - 1) * limit,
