@@ -10,7 +10,6 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Product } from "@/types";
-import { tr } from "zod/v4/locales";
 import Link from "next/link";
 
 export default function ProductCarousel({ data }: { data: Product[] }) {

@@ -133,7 +133,7 @@ export default async function SearchPage({
 					</ul>
 				</div>
 
-				<div className="text-xl mb-2 mt-8">Customus Review</div>
+				<div className="text-xl mb-2 mt-8">Customer Review</div>
 				<div>
 					<ul className="space-y-1">
 						<li>
