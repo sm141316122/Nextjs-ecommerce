@@ -82,7 +82,7 @@ export default function DealCountdown() {
 					</p>
 					<div className="text-center">
 						<Button nativeButton={false} render={<Link href="/search" />}>
-							Vuew Products
+							View Products
 						</Button>
 					</div>
 				</div>
@@ -117,7 +117,7 @@ export default function DealCountdown() {
 
 				<div className="text-center">
 					<Button nativeButton={false} render={<Link href="/search" />}>
-						Vuew Products
+						View Products
 					</Button>
 				</div>
 			</div>
