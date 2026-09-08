@@ -7,11 +7,12 @@ import { getUserById } from "./user.actions";
 import { getMyCart } from "./cart.actions";
 import { insertOrderSchema } from "../validators";
 import { prisma } from "@/db/prisma";
-import { CartItem } from "@/types";
+import { CartItem, ShippingAddress } from "@/types";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
 import { includes } from "zod";
 import { Prisma } from "../generated/prisma/client";
+import { sendPurchaseReceipt } from "@/email";
 
 export async function createOrder() {
 	try {
@@ -178,6 +179,23 @@ export async function updateOrderToPaid(orderId: string) {
 				paidAt: new Date(),
 			},
 		});
+	});
+
+	const updatedOrder = await prisma.order.findFirst({
+		where: { id: orderId },
+		include: {
+			orderItems: true,
+			user: { select: { name: true, email: true } },
+		},
+	});
+
+	if (!updatedOrder) throw new Error("Order not found");
+
+	sendPurchaseReceipt({
+		order: {
+			...updatedOrder,
+			shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
+		},
 	});
 }
 
