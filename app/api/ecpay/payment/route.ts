@@ -13,13 +13,13 @@ export async function POST(request: Request) {
 	try {
 		const session = await auth();
 		if (!session)
-			NextResponse.json(
+			return NextResponse.json(
 				{ message: "User is not authenticated" },
 				{ status: 401 },
 			);
 
 		if (!session?.user?.id)
-			NextResponse.json({ message: "User not found" }, { status: 404 });
+			return NextResponse.json({ message: "User not found" }, { status: 404 });
 
 		const result = await request.json();
 
@@ -31,14 +31,17 @@ export async function POST(request: Request) {
 			where: { id: orderId, userId: session!.user.id },
 		});
 		if (!order)
-			NextResponse.json({ message: "Order not found" }, { status: 404 });
+			return NextResponse.json({ message: "Order not found" }, { status: 404 });
 
 		if (order!.isPaid)
-			NextResponse.json({ message: "Order has been paid" }, { status: 400 });
+			return NextResponse.json(
+				{ message: "Order has been paid" },
+				{ status: 400 },
+			);
 
 		const totalAmount = Number(order!.totalPrice);
 		if (!Number.isInteger(totalAmount))
-			NextResponse.json(
+			return NextResponse.json(
 				{ message: "Total price must be Integer" },
 				{ status: 400 },
 			);

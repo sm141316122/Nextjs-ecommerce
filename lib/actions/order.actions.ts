@@ -10,7 +10,6 @@ import { prisma } from "@/db/prisma";
 import { CartItem, ShippingAddress } from "@/types";
 import { PAGE_SIZE } from "../constants";
 import { revalidatePath } from "next/cache";
-import { includes } from "zod";
 import { Prisma } from "../generated/prisma/client";
 import { sendPurchaseReceipt } from "@/email";
 
@@ -104,7 +103,7 @@ export async function createOrder() {
 
 		return {
 			success: true,
-			messga: "Order created",
+			message: "Order created",
 			redirectTo: `/order/${insertOrderId}`,
 		};
 	} catch (error) {
